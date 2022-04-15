@@ -40,6 +40,7 @@ const Card = (article) => {
   authorDiv.appendChild(authorPicDiv);
   authorPicDiv.appendChild(authorPic);
   authorDiv.appendChild(authorSpan);
+  cardDiv.addEventListener('click', console.log(headlineDiv));
   return cardDiv;
 }
 
@@ -54,9 +55,13 @@ const cardAppender = (selector) => {
   //
   const articleLocation = document.querySelector(selector);
   axios.get(`http://localhost:5001/api/articles`)
-  .then((res) =>{
-    const articleArr = res.data.articles;
-    articleLocation.appendChild(Card(articleArr));
+  .then((result) =>{
+    const articleArr = (result.data.articles.javascript).concat(result.data.articles.bootstrap).concat(result.data.articles.technology).concat(result.data.articles.jquery).concat(result.data.articles.node);
+    
+    articleArr.forEach(article =>{
+      articleLocation.appendChild(Card(article));
+    })
+    
   })
   .catch((err) => {
     console.error(err);
@@ -64,6 +69,7 @@ const cardAppender = (selector) => {
   .finally(() => {
     console.log("DONE!");
   })
+  return articleLocation;
 }
 
 export { Card, cardAppender }
